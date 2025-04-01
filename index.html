@@ -124,10 +124,23 @@
       font-size: clamp(0.875rem, 2vw, 1rem);
     }
 
-    .commission-amount {
+    .commission-amount, .vat-amount, .total-fee {
       font-size: clamp(0.75rem, 2vw, 0.875rem);
       color: #666;
       margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .total-fee {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .arrow {
+      color: #666;
     }
 
     /* Media Queries */
@@ -255,7 +268,15 @@
         color: #4CAF50;
       }
 
-      .commission-amount {
+      .commission-amount, .vat-amount {
+        color: #aaa;
+      }
+      
+      .total-fee {
+        color: #4CAF50;
+      }
+      
+      .arrow {
         color: #aaa;
       }
     }
@@ -286,19 +307,52 @@
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Account) (ค่าคอม: 0.2079%)</div>
           <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-1" class="total-value">0 บาท</span></div>
-          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="buy-commission-1">0 บาท</span></div>
+          <div class="commission-amount">
+            <span class="arrow">→</span>
+            ค่าคอมมิชชั่น: <span id="buy-commission-1">0 บาท</span>
+          </div>
+          <div class="vat-amount">
+            <span class="arrow">→</span>
+            VAT 7%: <span id="buy-vat-1">0 บาท</span>
+          </div>
+          <div class="total-fee">
+            <span class="arrow">→</span>
+            รวมค่าธรรมเนียม: <span id="buy-total-fee-1">0 บาท</span>
+          </div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Balance) (ค่าคอม: 0.1578%)</div>
           <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-2" class="total-value">0 บาท</span></div>
-          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="buy-commission-2">0 บาท</span></div>
+          <div class="commission-amount">
+            <span class="arrow">→</span>
+            ค่าคอมมิชชั่น: <span id="buy-commission-2">0 บาท</span>
+          </div>
+          <div class="vat-amount">
+            <span class="arrow">→</span>
+            VAT 7%: <span id="buy-vat-2">0 บาท</span>
+          </div>
+          <div class="total-fee">
+            <span class="arrow">→</span>
+            รวมค่าธรรมเนียม: <span id="buy-total-fee-2">0 บาท</span>
+          </div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเจ้าหน้าที่ (ค่าคอม: 0.2570%)</div>
           <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-3" class="total-value">0 บาท</span></div>
-          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="buy-commission-3">0 บาท</span></div>
+          <div class="commission-amount">
+            <span class="arrow">→</span>
+            ค่าคอมมิชชั่น: <span id="buy-commission-3">0 บาท</span>
+          </div>
+          <div class="vat-amount">
+            <span class="arrow">→</span>
+            VAT 7%: <span id="buy-vat-3">0 บาท</span>
+          </div>
+          <div class="total-fee">
+            <span class="arrow">→</span>
+            รวมค่าธรรมเนียม: <span id="buy-total-fee-3">0 บาท</span>
+          </div>
         </div>
       </div>
     </div>
@@ -318,19 +372,52 @@
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Account) (ค่าคอม: 0.2079%)</div>
           <div>ยอดเงินที่ได้รับ: <span id="sell-total-1" class="total-value">0 บาท</span></div>
-          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="sell-commission-1">0 บาท</span></div>
+          <div class="commission-amount">
+            <span class="arrow">→</span>
+            ค่าคอมมิชชั่น: <span id="sell-commission-1">0 บาท</span>
+          </div>
+          <div class="vat-amount">
+            <span class="arrow">→</span>
+            VAT 7%: <span id="sell-vat-1">0 บาท</span>
+          </div>
+          <div class="total-fee">
+            <span class="arrow">→</span>
+            รวมค่าธรรมเนียม: <span id="sell-total-fee-1">0 บาท</span>
+          </div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Balance) (ค่าคอม: 0.1578%)</div>
           <div>ยอดเงินที่ได้รับ: <span id="sell-total-2" class="total-value">0 บาท</span></div>
-          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="sell-commission-2">0 บาท</span></div>
+          <div class="commission-amount">
+            <span class="arrow">→</span>
+            ค่าคอมมิชชั่น: <span id="sell-commission-2">0 บาท</span>
+          </div>
+          <div class="vat-amount">
+            <span class="arrow">→</span>
+            VAT 7%: <span id="sell-vat-2">0 บาท</span>
+          </div>
+          <div class="total-fee">
+            <span class="arrow">→</span>
+            รวมค่าธรรมเนียม: <span id="sell-total-fee-2">0 บาท</span>
+          </div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเจ้าหน้าที่ (ค่าคอม: 0.2570%)</div>
           <div>ยอดเงินที่ได้รับ: <span id="sell-total-3" class="total-value">0 บาท</span></div>
-          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="sell-commission-3">0 บาท</span></div>
+          <div class="commission-amount">
+            <span class="arrow">→</span>
+            ค่าคอมมิชชั่น: <span id="sell-commission-3">0 บาท</span>
+          </div>
+          <div class="vat-amount">
+            <span class="arrow">→</span>
+            VAT 7%: <span id="sell-vat-3">0 บาท</span>
+          </div>
+          <div class="total-fee">
+            <span class="arrow">→</span>
+            รวมค่าธรรมเนียม: <span id="sell-total-fee-3">0 บาท</span>
+          </div>
         </div>
       </div>
     </div>
@@ -369,24 +456,44 @@
       const baseTotal = price * amount;
       
       // Calculate for each store
-      const total1 = baseTotal * (1 + commissionRates.store1);
-      const total2 = baseTotal * (1 + commissionRates.store2);
-      const total3 = baseTotal * (1 + commissionRates.store3);
-      
-      // Calculate commission amounts
       const commission1 = baseTotal * commissionRates.store1;
       const commission2 = baseTotal * commissionRates.store2;
       const commission3 = baseTotal * commissionRates.store3;
       
-      // Update totals
-      document.getElementById('buy-total-1').textContent = formatCurrency(total1);
-      document.getElementById('buy-total-2').textContent = formatCurrency(total2);
-      document.getElementById('buy-total-3').textContent = formatCurrency(total3);
+      // Calculate VAT (7%)
+      const vat1 = commission1 * 0.07;
+      const vat2 = commission2 * 0.07;
+      const vat3 = commission3 * 0.07;
+      
+      // Calculate total fees (commission + VAT)
+      const totalFee1 = commission1 + vat1;
+      const totalFee2 = commission2 + vat2;
+      const totalFee3 = commission3 + vat3;
+      
+      // Calculate final totals (including fees)
+      const total1 = baseTotal + totalFee1;
+      const total2 = baseTotal + totalFee2;
+      const total3 = baseTotal + totalFee3;
       
       // Update commission amounts
       document.getElementById('buy-commission-1').textContent = formatCurrency(commission1);
       document.getElementById('buy-commission-2').textContent = formatCurrency(commission2);
       document.getElementById('buy-commission-3').textContent = formatCurrency(commission3);
+      
+      // Update VAT amounts
+      document.getElementById('buy-vat-1').textContent = formatCurrency(vat1);
+      document.getElementById('buy-vat-2').textContent = formatCurrency(vat2);
+      document.getElementById('buy-vat-3').textContent = formatCurrency(vat3);
+      
+      // Update total fees
+      document.getElementById('buy-total-fee-1').textContent = formatCurrency(totalFee1);
+      document.getElementById('buy-total-fee-2').textContent = formatCurrency(totalFee2);
+      document.getElementById('buy-total-fee-3').textContent = formatCurrency(totalFee3);
+      
+      // Update final totals
+      document.getElementById('buy-total-1').textContent = formatCurrency(total1);
+      document.getElementById('buy-total-2').textContent = formatCurrency(total2);
+      document.getElementById('buy-total-3').textContent = formatCurrency(total3);
     }
     
     /**
@@ -399,24 +506,44 @@
       const baseTotal = price * amount;
       
       // Calculate for each store
-      const total1 = baseTotal * (1 - commissionRates.store1);
-      const total2 = baseTotal * (1 - commissionRates.store2);
-      const total3 = baseTotal * (1 - commissionRates.store3);
-      
-      // Calculate commission amounts
       const commission1 = baseTotal * commissionRates.store1;
       const commission2 = baseTotal * commissionRates.store2;
       const commission3 = baseTotal * commissionRates.store3;
       
-      // Update totals
-      document.getElementById('sell-total-1').textContent = formatCurrency(total1);
-      document.getElementById('sell-total-2').textContent = formatCurrency(total2);
-      document.getElementById('sell-total-3').textContent = formatCurrency(total3);
+      // Calculate VAT (7%)
+      const vat1 = commission1 * 0.07;
+      const vat2 = commission2 * 0.07;
+      const vat3 = commission3 * 0.07;
+      
+      // Calculate total fees (commission + VAT)
+      const totalFee1 = commission1 + vat1;
+      const totalFee2 = commission2 + vat2;
+      const totalFee3 = commission3 + vat3;
+      
+      // Calculate final totals (excluding fees)
+      const total1 = baseTotal - totalFee1;
+      const total2 = baseTotal - totalFee2;
+      const total3 = baseTotal - totalFee3;
       
       // Update commission amounts
       document.getElementById('sell-commission-1').textContent = formatCurrency(commission1);
       document.getElementById('sell-commission-2').textContent = formatCurrency(commission2);
       document.getElementById('sell-commission-3').textContent = formatCurrency(commission3);
+      
+      // Update VAT amounts
+      document.getElementById('sell-vat-1').textContent = formatCurrency(vat1);
+      document.getElementById('sell-vat-2').textContent = formatCurrency(vat2);
+      document.getElementById('sell-vat-3').textContent = formatCurrency(vat3);
+      
+      // Update total fees
+      document.getElementById('sell-total-fee-1').textContent = formatCurrency(totalFee1);
+      document.getElementById('sell-total-fee-2').textContent = formatCurrency(totalFee2);
+      document.getElementById('sell-total-fee-3').textContent = formatCurrency(totalFee3);
+      
+      // Update final totals
+      document.getElementById('sell-total-1').textContent = formatCurrency(total1);
+      document.getElementById('sell-total-2').textContent = formatCurrency(total2);
+      document.getElementById('sell-total-3').textContent = formatCurrency(total3);
     }
     
     // Add real-time calculation on input changes
