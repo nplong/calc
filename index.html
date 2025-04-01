@@ -124,6 +124,12 @@
       font-size: clamp(0.875rem, 2vw, 1rem);
     }
 
+    .commission-amount {
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
+      color: #666;
+      margin-top: 5px;
+    }
+
     /* Media Queries */
     @media screen and (max-width: 768px) {
       body {
@@ -248,6 +254,10 @@
       .total-value {
         color: #4CAF50;
       }
+
+      .commission-amount {
+        color: #aaa;
+      }
     }
 
     /* Enhance visual separation */
@@ -275,17 +285,20 @@
       <div class="results">
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Account) (ค่าคอม: 0.2079%)</div>
-          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-1" class="total-value">$5,010.40</span></div>
+          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-1" class="total-value">0 บาท</span></div>
+          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="buy-commission-1">0 บาท</span></div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Balance) (ค่าคอม: 0.1578%)</div>
-          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-2" class="total-value">$5,007.89</span></div>
+          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-2" class="total-value">0 บาท</span></div>
+          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="buy-commission-2">0 บาท</span></div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเจ้าหน้าที่ (ค่าคอม: 0.2570%)</div>
-          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-3" class="total-value">$5,012.85</span></div>
+          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-3" class="total-value">0 บาท</span></div>
+          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="buy-commission-3">0 บาท</span></div>
         </div>
       </div>
     </div>
@@ -304,17 +317,20 @@
       <div class="results">
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Account) (ค่าคอม: 0.2079%)</div>
-          <div>ยอดเงินที่ได้รับ: <span id="sell-total-1" class="total-value">$4,989.61</span></div>
+          <div>ยอดเงินที่ได้รับ: <span id="sell-total-1" class="total-value">0 บาท</span></div>
+          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="sell-commission-1">0 บาท</span></div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Balance) (ค่าคอม: 0.1578%)</div>
-          <div>ยอดเงินที่ได้รับ: <span id="sell-total-2" class="total-value">$4,992.11</span></div>
+          <div>ยอดเงินที่ได้รับ: <span id="sell-total-2" class="total-value">0 บาท</span></div>
+          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="sell-commission-2">0 บาท</span></div>
         </div>
         
         <div class="result-item">
           <div class="store-info">คีย์ผ่านเจ้าหน้าที่ (ค่าคอม: 0.2570%)</div>
-          <div>ยอดเงินที่ได้รับ: <span id="sell-total-3" class="total-value">$4,987.15</span></div>
+          <div>ยอดเงินที่ได้รับ: <span id="sell-total-3" class="total-value">0 บาท</span></div>
+          <div class="commission-amount">ค่าคอมมิชชั่น: <span id="sell-commission-3">0 บาท</span></div>
         </div>
       </div>
     </div>
@@ -352,11 +368,25 @@
       const amount = parseInt(document.getElementById('buy-amount').value) || 0;
       const baseTotal = price * amount;
       
-      // Calculate total with commission for each store
-      // Formula: base amount * (1 + commission rate)
-      document.getElementById('buy-total-1').textContent = formatCurrency(baseTotal * (1 + commissionRates.store1));
-      document.getElementById('buy-total-2').textContent = formatCurrency(baseTotal * (1 + commissionRates.store2));
-      document.getElementById('buy-total-3').textContent = formatCurrency(baseTotal * (1 + commissionRates.store3));
+      // Calculate for each store
+      const total1 = baseTotal * (1 + commissionRates.store1);
+      const total2 = baseTotal * (1 + commissionRates.store2);
+      const total3 = baseTotal * (1 + commissionRates.store3);
+      
+      // Calculate commission amounts
+      const commission1 = baseTotal * commissionRates.store1;
+      const commission2 = baseTotal * commissionRates.store2;
+      const commission3 = baseTotal * commissionRates.store3;
+      
+      // Update totals
+      document.getElementById('buy-total-1').textContent = formatCurrency(total1);
+      document.getElementById('buy-total-2').textContent = formatCurrency(total2);
+      document.getElementById('buy-total-3').textContent = formatCurrency(total3);
+      
+      // Update commission amounts
+      document.getElementById('buy-commission-1').textContent = formatCurrency(commission1);
+      document.getElementById('buy-commission-2').textContent = formatCurrency(commission2);
+      document.getElementById('buy-commission-3').textContent = formatCurrency(commission3);
     }
     
     /**
@@ -368,11 +398,25 @@
       const amount = parseInt(document.getElementById('sell-amount').value) || 0;
       const baseTotal = price * amount;
       
-      // Calculate total after commission deduction for each store
-      // Formula: base amount * (1 - commission rate)
-      document.getElementById('sell-total-1').textContent = formatCurrency(baseTotal * (1 - commissionRates.store1));
-      document.getElementById('sell-total-2').textContent = formatCurrency(baseTotal * (1 - commissionRates.store2));
-      document.getElementById('sell-total-3').textContent = formatCurrency(baseTotal * (1 - commissionRates.store3));
+      // Calculate for each store
+      const total1 = baseTotal * (1 - commissionRates.store1);
+      const total2 = baseTotal * (1 - commissionRates.store2);
+      const total3 = baseTotal * (1 - commissionRates.store3);
+      
+      // Calculate commission amounts
+      const commission1 = baseTotal * commissionRates.store1;
+      const commission2 = baseTotal * commissionRates.store2;
+      const commission3 = baseTotal * commissionRates.store3;
+      
+      // Update totals
+      document.getElementById('sell-total-1').textContent = formatCurrency(total1);
+      document.getElementById('sell-total-2').textContent = formatCurrency(total2);
+      document.getElementById('sell-total-3').textContent = formatCurrency(total3);
+      
+      // Update commission amounts
+      document.getElementById('sell-commission-1').textContent = formatCurrency(commission1);
+      document.getElementById('sell-commission-2').textContent = formatCurrency(commission2);
+      document.getElementById('sell-commission-3').textContent = formatCurrency(commission3);
     }
     
     // Add real-time calculation on input changes
