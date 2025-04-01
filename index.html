@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>คำนวณราคาซ์้อ/ขาย</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* General page styling */
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    h1 {
+      color: #b6b6b6;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      padding: 0 10px;
+    }
+    
+    .calculator {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 10px;
+      position: relative;
+    }
+    
+    .buy-section, .sell-section {
+      flex: 1;
+      min-width: 280px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background: #fff;
+      transition: transform 0.3s ease, z-index 0s 0.3s;
+    }
+    
+    .section-header {
+      background-color: #f5f5f5;
+      padding: 15px;
+      margin: -15px -15px 15px -15px;
+      border-bottom: 1px solid #ddd;
+      border-radius: 5px 5px 0 0;
+      font-weight: bold;
+      text-align: center;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .buy-section .section-header {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .sell-section .section-header {
+      background-color: #dc3545;
+      color: white;
+    }
+    
+    .input-group {
+      margin-bottom: 15px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      text-align: center;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+    }
+    
+    input::placeholder {
+      color: #666;
+      opacity: 1;
+    }
+    
+    /* Results section styling */
+    .results {
+      margin-top: 20px;
+    }
+    
+    .result-item {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s ease;
+    }
+    
+    .result-item:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .store-info {
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .total-value {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: clamp(0.875rem, 2vw, 1rem);
+    }
+
+    /* Media Queries */
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      .calculator {
+        min-height: 500px;
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        touch-action: pan-y pinch-zoom;
+      }
+
+      .buy-section, .sell-section {
+        position: absolute;
+        width: calc(100% - 40px);
+        margin: 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        touch-action: none; /* Enable touch events */
+      }
+
+      /* Default positions */
+      .buy-section {
+        transform: translate(-10px, 40px); /* Moved further down */
+        z-index: 2;
+      }
+
+      .sell-section {
+        transform: translate(10px, -10px);
+        z-index: 1;
+      }
+
+      /* Active state positions */
+      .section-active {
+        transform: translate(-10px, 40px) !important; /* Moved further down */
+        z-index: 3;
+      }
+
+      .section-inactive {
+        transform: translate(10px, -10px) !important;
+        z-index: 1;
+      }
+
+      /* Add transition for sliding */
+      .sliding {
+        transition: transform 0.1s ease-out;
+      }
+
+      /* Add visual feedback for sliding */
+      .sliding-left {
+        transform: translateX(-30px) !important;
+      }
+
+      .sliding-right {
+        transform: translateX(30px) !important;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      body {
+        padding: 5px;
+      }
+      
+      .input-group {
+        margin-bottom: 10px;
+      }
+      
+      input {
+        padding: 8px;
+      }
+      
+      .result-item {
+        padding: 10px;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+      }
+      
+      .buy-section, .sell-section {
+        border-color: #333;
+        background-color: #242424;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      }
+      
+      .buy-section .section-header {
+        background-color: #2e7d32;
+      }
+      
+      .sell-section .section-header {
+        background-color: #c62828;
+      }
+      
+      input {
+        background-color: #333;
+        border-color: #444;
+        color: #e0e0e0;
+      }
+      
+      input::placeholder {
+        color: #999;
+      }
+      
+      .result-item {
+        background-color: #2a2a2a;
+      }
+      
+      .result-item:hover {
+        background-color: #333;
+      }
+      
+      .store-info {
+        color: #aaa;
+      }
+      
+      .total-value {
+        color: #4CAF50;
+      }
+    }
+
+    /* Enhance visual separation */
+    .buy-section, .sell-section {
+      background: #fff;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>คำนวณราคาซ์้อ/ขาย</h1>
+  
+  <div class="calculator">
+    <div class="buy-section section-active">
+      <div class="section-header" onclick="toggleSection('buy')">BUY</div>
+      
+      <div class="input-group">
+        <input type="number" id="buy-price" step="0.01" min="0" placeholder="ราคาที่ต้องการซื้อ (ต่อหุ้น)">
+      </div>
+      
+      <div class="input-group">
+        <input type="number" id="buy-amount" step="1" min="1" placeholder="จำนวนหุ้น">
+      </div>
+      
+      <div class="results">
+        <div class="result-item">
+          <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Account) (ค่าคอม: 0.2079%)</div>
+          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-1" class="total-value">$5,010.40</span></div>
+        </div>
+        
+        <div class="result-item">
+          <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Balance) (ค่าคอม: 0.1578%)</div>
+          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-2" class="total-value">$5,007.89</span></div>
+        </div>
+        
+        <div class="result-item">
+          <div class="store-info">คีย์ผ่านเจ้าหน้าที่ (ค่าคอม: 0.2570%)</div>
+          <div>ยอดเงินที่ต้องจ่าย: <span id="buy-total-3" class="total-value">$5,012.85</span></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="sell-section">
+      <div class="section-header" onclick="toggleSection('sell')">SELL</div>
+      
+      <div class="input-group">
+        <input type="number" id="sell-price" step="0.01" min="0" placeholder="ราคาที่ต้องการขาย (ต่อหุ้น)">
+      </div>
+      
+      <div class="input-group">
+        <input type="number" id="sell-amount" step="1" min="1" placeholder="จำนวนหุ้น">
+      </div>
+      
+      <div class="results">
+        <div class="result-item">
+          <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Account) (ค่าคอม: 0.2079%)</div>
+          <div>ยอดเงินที่ได้รับ: <span id="sell-total-1" class="total-value">$4,989.61</span></div>
+        </div>
+        
+        <div class="result-item">
+          <div class="store-info">คีย์ผ่านเน็ต (บัญชี Cash Balance) (ค่าคอม: 0.1578%)</div>
+          <div>ยอดเงินที่ได้รับ: <span id="sell-total-2" class="total-value">$4,992.11</span></div>
+        </div>
+        
+        <div class="result-item">
+          <div class="store-info">คีย์ผ่านเจ้าหน้าที่ (ค่าคอม: 0.2570%)</div>
+          <div>ยอดเงินที่ได้รับ: <span id="sell-total-3" class="total-value">$4,987.15</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Store-specific commission rates as percentages
+    // store1: 0.2079%
+    // store2: 0.1578%
+    // store3: 0.2570%
+    const commissionRates = {
+      store1: 0.002079,
+      store2: 0.001578,
+      store3: 0.00257
+    };
+    
+    /**
+     * Formats a number into Thai Baht currency string
+     * @param {number} number - The number to format
+     * @returns {string} Formatted currency string (e.g., "1,234.56 บาท")
+     */
+    function formatCurrency(number) {
+      return new Intl.NumberFormat('th-TH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(number) + ' บาท';
+    }
+    
+    /**
+     * Calculates and updates the total cost including commission for buying
+     * Updates the display for all three stores
+     */
+    function calculateBuyTotals() {
+      const price = parseFloat(document.getElementById('buy-price').value) || 0;
+      const amount = parseInt(document.getElementById('buy-amount').value) || 0;
+      const baseTotal = price * amount;
+      
+      // Calculate total with commission for each store
+      // Formula: base amount * (1 + commission rate)
+      document.getElementById('buy-total-1').textContent = formatCurrency(baseTotal * (1 + commissionRates.store1));
+      document.getElementById('buy-total-2').textContent = formatCurrency(baseTotal * (1 + commissionRates.store2));
+      document.getElementById('buy-total-3').textContent = formatCurrency(baseTotal * (1 + commissionRates.store3));
+    }
+    
+    /**
+     * Calculates and updates the total amount received after commission for selling
+     * Updates the display for all three stores
+     */
+    function calculateSellTotals() {
+      const price = parseFloat(document.getElementById('sell-price').value) || 0;
+      const amount = parseInt(document.getElementById('sell-amount').value) || 0;
+      const baseTotal = price * amount;
+      
+      // Calculate total after commission deduction for each store
+      // Formula: base amount * (1 - commission rate)
+      document.getElementById('sell-total-1').textContent = formatCurrency(baseTotal * (1 - commissionRates.store1));
+      document.getElementById('sell-total-2').textContent = formatCurrency(baseTotal * (1 - commissionRates.store2));
+      document.getElementById('sell-total-3').textContent = formatCurrency(baseTotal * (1 - commissionRates.store3));
+    }
+    
+    // Add real-time calculation on input changes
+    document.getElementById('buy-price').addEventListener('input', calculateBuyTotals);
+    document.getElementById('buy-amount').addEventListener('input', calculateBuyTotals);
+    document.getElementById('sell-price').addEventListener('input', calculateSellTotals);
+    document.getElementById('sell-amount').addEventListener('input', calculateSellTotals);
+    
+    // Initialize calculations with default values
+    calculateBuyTotals();
+    calculateSellTotals();
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let currentSection = 'buy';
+    let isDragging = false;
+    const SWIPE_THRESHOLD = 50; // Minimum distance for a swipe
+
+    function handleTouchStart(event) {
+      touchStartX = event.touches[0].clientX;
+      isDragging = true;
+
+      // Get the current active section
+      const activeSection = document.querySelector('.section-active');
+      activeSection.classList.add('sliding');
+    }
+
+    function handleTouchMove(event) {
+      if (!isDragging) return;
+      
+      const activeSection = document.querySelector('.section-active');
+      const deltaX = event.touches[0].clientX - touchStartX;
+
+      // Add visual feedback based on drag direction
+      if (deltaX > 20) {
+        activeSection.classList.add('sliding-right');
+        activeSection.classList.remove('sliding-left');
+      } else if (deltaX < -20) {
+        activeSection.classList.add('sliding-left');
+        activeSection.classList.remove('sliding-right');
+      } else {
+        activeSection.classList.remove('sliding-left', 'sliding-right');
+      }
+    }
+
+    function handleTouchEnd(event) {
+      if (!isDragging) return;
+      
+      touchEndX = event.changedTouches[0].clientX;
+      const deltaX = touchEndX - touchStartX;
+
+      // Remove sliding classes
+      const activeSection = document.querySelector('.section-active');
+      activeSection.classList.remove('sliding', 'sliding-left', 'sliding-right');
+
+      // Check if swipe distance meets threshold
+      if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
+        if (deltaX > 0) {
+          // Swipe right
+          toggleSection(currentSection === 'buy' ? 'sell' : 'buy');
+        } else {
+          // Swipe left
+          toggleSection(currentSection === 'buy' ? 'sell' : 'buy');
+        }
+      }
+
+      isDragging = false;
+    }
+
+    function toggleSection(section) {
+      if (window.innerWidth > 768) return;
+
+      const buySection = document.querySelector('.buy-section');
+      const sellSection = document.querySelector('.sell-section');
+
+      // Get the clicked section and the other section
+      const clickedSection = section === 'buy' ? buySection : sellSection;
+      const otherSection = section === 'buy' ? sellSection : buySection;
+
+      // Only toggle if switching to a different section
+      if (currentSection !== section) {
+        clickedSection.classList.remove('section-inactive');
+        clickedSection.classList.add('section-active');
+        otherSection.classList.remove('section-active');
+        otherSection.classList.add('section-inactive');
+        currentSection = section;
+      }
+    }
+
+    function initializeSections() {
+      if (window.innerWidth <= 768) {
+        const buySection = document.querySelector('.buy-section');
+        const sellSection = document.querySelector('.sell-section');
+        
+        buySection.classList.add('section-active');
+        sellSection.classList.add('section-inactive');
+        currentSection = 'buy';
+
+        // Add touch event listeners
+        document.querySelector('.calculator').addEventListener('touchstart', handleTouchStart, false);
+        document.querySelector('.calculator').addEventListener('touchmove', handleTouchMove, false);
+        document.querySelector('.calculator').addEventListener('touchend', handleTouchEnd, false);
+      } else {
+        // Remove touch event listeners for desktop
+        document.querySelector('.calculator').removeEventListener('touchstart', handleTouchStart);
+        document.querySelector('.calculator').removeEventListener('touchmove', handleTouchMove);
+        document.querySelector('.calculator').removeEventListener('touchend', handleTouchEnd);
+
+        // Reset classes for desktop view
+        document.querySelectorAll('.buy-section, .sell-section').forEach(section => {
+          section.classList.remove('section-active', 'section-inactive', 'sliding', 'sliding-left', 'sliding-right');
+        });
+      }
+    }
+
+    // Add event listeners
+    window.addEventListener('load', initializeSections);
+    window.addEventListener('resize', initializeSections);
+  </script>
+</body>
+</html>
